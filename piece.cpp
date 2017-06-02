@@ -8,11 +8,30 @@
 
 #include "piece.hpp"
 
-//Sets the color for the piece, 1 is for white and 2 for black
-void Piece::setColor (int color) {
-    if (color == 1) {
-        color = 1;
+//Sets the color and texture of the piece
+void Piece::setTextureAndColor (pieceColors& colorParameter) {
+    textureAdder.loadWhiteTexture();
+    textureAdder.loadBlackTexture();
+    color = colorParameter;
+    
+    if (colorParameter == pieceColors::black) {
+        texture = textureAdder.blackTexture;
     } else {
-        color = 2;
+        texture = textureAdder.whiteTexture;
     }
+}
+
+//Add the texture to the piece
+void Piece::addTexture(sf::Sprite& tile) {
+    if (color == pieceColors::black) {
+        tile.setTexture(texture);
+    } else {
+        tile.setTexture(texture);
+    }
+    
+    /*
+    tile.setScale(0.88, 0.88);
+    int radius = 75;
+    tile.setPosition(mousePos.x-radius, mousePos.y-radius);
+     */
 }

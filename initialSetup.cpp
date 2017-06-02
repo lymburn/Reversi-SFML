@@ -14,3 +14,7 @@ void createBackground(sf::Sprite& background, sf::Texture& texture) {
     background.setTexture(texture);
     background.setScale(1.66f,1.66f);
 }
+
+void setupInitialPieces() {
+    
+}

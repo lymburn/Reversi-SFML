@@ -18,9 +18,16 @@ void TextureManager::loadBoardTexture() {
     }
 }
 
-void TextureManager::loadWhiteTile() {
-    if (!whiteTile.loadFromFile(resourcePath() + "white.png")) {
+void TextureManager::loadWhiteTexture() {
+    if (!whiteTexture.loadFromFile(resourcePath() + "white.png")) {
         return EXIT_FAILURE;
     }
 }
+
+void TextureManager::loadBlackTexture() {
+    if (!blackTexture.loadFromFile(resourcePath() + "black.png")) {
+        return EXIT_FAILURE;
+    }
+}
+
 

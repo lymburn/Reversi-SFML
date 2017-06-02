@@ -10,12 +10,20 @@
 #define piece_hpp
 
 #include <stdio.h>
+#include "SFML/Graphics.hpp"
+#include "texturemanager.hpp"
+
+enum class pieceColors {black,white};
 
 class Piece {
     public:
-        void setColor(int color);
+        sf::Sprite tile;
+        void setTextureAndColor(pieceColors& color);
+        void addTexture(sf::Sprite& tile);
+        TextureManager textureAdder;
     private:
-        int color;
+        pieceColors color;
+        sf::Texture texture;
 };
 
 #endif /* piece_hpp */

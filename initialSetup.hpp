@@ -15,3 +15,5 @@
 
 void createBackground(sf::Sprite& background,sf::Texture& texture);
 #endif /* initialSetup_hpp */
+
+void setupInitialPieces();
