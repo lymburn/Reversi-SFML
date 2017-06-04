@@ -10,28 +10,18 @@
 
 //Sets the color and texture of the piece
 void Piece::setTextureAndColor (pieceColors& colorParameter) {
-    textureAdder.loadWhiteTexture();
-    textureAdder.loadBlackTexture();
+    textureAdder.loadPieceTexture();
     color = colorParameter;
-    
-    if (colorParameter == pieceColors::black) {
-        texture = textureAdder.blackTexture;
-    } else {
-        texture = textureAdder.whiteTexture;
-    }
+    texture = textureAdder.pieceTexture;
 }
 
 //Add the texture to the piece
-void Piece::addTexture(sf::Sprite& tile) {
+void Piece::addTextureAndColor(sf::Sprite& tile) {
+    tile.setTexture(texture);
     if (color == pieceColors::black) {
-        tile.setTexture(texture);
+        tile.setColor(sf::Color(0,0,0,255));
     } else {
-        tile.setTexture(texture);
+        tile.setColor(sf::Color(255,255,255,255));
     }
-    
-    /*
-    tile.setScale(0.88, 0.88);
-    int radius = 75;
-    tile.setPosition(mousePos.x-radius, mousePos.y-radius);
-     */
 }
+

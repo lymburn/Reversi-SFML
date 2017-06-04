@@ -18,14 +18,8 @@ void TextureManager::loadBoardTexture() {
     }
 }
 
-void TextureManager::loadWhiteTexture() {
-    if (!whiteTexture.loadFromFile(resourcePath() + "white.png")) {
-        return EXIT_FAILURE;
-    }
-}
-
-void TextureManager::loadBlackTexture() {
-    if (!blackTexture.loadFromFile(resourcePath() + "black.png")) {
+void TextureManager::loadPieceTexture() {
+    if (!pieceTexture.loadFromFile(resourcePath() + "piece.png")) {
         return EXIT_FAILURE;
     }
 }

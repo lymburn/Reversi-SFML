@@ -22,7 +22,8 @@ class Game {
         void run();
         TextureManager textureLoader;
     private:
-        void loadTexturesAndBackground();
+        void loadIcon(sf::RenderWindow& window);
+        void loadTexturesAndBackground(sf::RenderWindow& window);
         sf::Sprite background;
 };
 

@@ -18,8 +18,12 @@ enum class pieceColors {black,white};
 class Piece {
     public:
         sf::Sprite tile;
+        int row;
+        int col;
         void setTextureAndColor(pieceColors& color);
-        void addTexture(sf::Sprite& tile);
+        void addTextureAndColor(sf::Sprite& tile);
+        //void putPiece(pieceColors color, sf::Vector2i& mousePos, sf::RenderWindow& window,const float RADIUS);
+        void putPiece(pieceColors color, sf::Vector2i& mousePos, const float RADIUS,sf::RenderWindow& window);
         TextureManager textureAdder;
     private:
         pieceColors color;

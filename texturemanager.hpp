@@ -15,11 +15,9 @@
 class TextureManager {
     public:
         void loadBoardTexture();
-        void loadWhiteTexture();
-        void loadBlackTexture();
+        void loadPieceTexture();
         sf::Texture boardTexture;
-        sf::Texture whiteTexture;
-        sf::Texture blackTexture;
+        sf::Texture pieceTexture;
 };
 
 #endif /* texturemanager_hpp */
