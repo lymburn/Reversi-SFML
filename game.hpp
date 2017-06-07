@@ -14,17 +14,13 @@
 #include "SFML/Graphics.hpp"
 #include "ResourcePath.hpp"
 #include "piece.hpp"
-#include "texturemanager.hpp"
-#include "initialSetup.hpp"
+#include "setupManager.hpp"
+#include "positionchecker.hpp"
+#include "internalboard.hpp"
 
 class Game {
     public:
         void run();
-        TextureManager textureLoader;
-    private:
-        void loadIcon(sf::RenderWindow& window);
-        void loadTexturesAndBackground(sf::RenderWindow& window);
-        sf::Sprite background;
 };
 
 #endif /* game_hpp */

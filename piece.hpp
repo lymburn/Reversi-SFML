@@ -13,21 +13,18 @@
 #include "SFML/Graphics.hpp"
 #include "texturemanager.hpp"
 
-enum class pieceColors {black,white};
+enum class PieceColors {black,white};
 
 class Piece {
     public:
         sf::Sprite tile;
-        int row;
-        int col;
-        void setTextureAndColor(pieceColors& color);
+        void setTextureAndColor(PieceColors& color);
         void addTextureAndColor(sf::Sprite& tile);
-        //void putPiece(pieceColors color, sf::Vector2i& mousePos, sf::RenderWindow& window,const float RADIUS);
-        void putPiece(pieceColors color, sf::Vector2i& mousePos, const float RADIUS,sf::RenderWindow& window);
-        TextureManager textureAdder;
+        std::string oppositeColor(std::string color);
     private:
-        pieceColors color;
+        PieceColors color;
         sf::Texture texture;
+        TextureManager TextureAdder;
 };
 
 #endif /* piece_hpp */

@@ -7,23 +7,45 @@
 //
 
 #include "game.hpp"
-
 void Game::run() {
     //Creates initial window
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
     sf::RenderWindow window(sf::VideoMode(1200, 1200), "Reversi");
     window.setFramerateLimit(60);
     
-    //Set up initial board pieces
+    //Board and piece dimensions
     const float BOARD_SQUARE_LENGTH = 151.06;
     const float CENTRE_OFFSET = 11.21;
     const float RADIUS = 61.0;
     
-    Piece initialVisiblePiecesArray[4];
-    setupVisiblePieces(initialVisiblePiecesArray, 4,BOARD_SQUARE_LENGTH, CENTRE_OFFSET);
+    float widthScale, heightScale;
+    bool stop = false;
+    //Variables and objects
+    std::string playerColor;
+    std::string opponentColor;
+    int whiteScore = 2;
+    int blackScore = 2;
+    std::string turn = "P";
+    int xCoord, yCoord;
+    Piece GamePiece;
+    SetupManager GameSetup;
+    //Object to check positions and legal moves
+    PositionChecker CheckPosition;
+    InternalBoard Board;
+    sf::Clock clock;
+    //Player's chosen color
+    playerColor = "W";
+    opponentColor = GamePiece.oppositeColor(playerColor);
+
     
-    Piece initialTransparentPiecesArray[8][8];
-    setupTransparentPieces(initialTransparentPiecesArray, 8, BOARD_SQUARE_LENGTH, CENTRE_OFFSET);
+    //Initializes the 4 initial pieces
+    Piece InitialVisiblePiecesArray[4];
+    GameSetup.setupVisiblePieces(InitialVisiblePiecesArray, 4,BOARD_SQUARE_LENGTH, CENTRE_OFFSET);
     
+    //Initializes the rest of the transparent pieces
+    Piece InitialTransparentPiecesArray[8][8];
+    GameSetup.setupTransparentPieces(InitialTransparentPiecesArray, 8, BOARD_SQUARE_LENGTH, CENTRE_OFFSET);
+    int i = 0;
     // Start the game loop
     while (window.isOpen())
     {
@@ -45,58 +67,102 @@ void Game::run() {
         // Clear screen
         window.clear();
         
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        
         //Loads the icon
-        loadIcon(window);
+        GameSetup.loadIcon(window);
         
+        sf::Vector2u size = window.getSize();
+        unsigned int width = size.x;
+        unsigned int height = size.y;
+        widthScale = float(size.x)/722;
+        heightScale = float(size.y)/722;
+        
+        std::cout << widthScale << " " << heightScale << std::endl;
         //Load the textures and create background
-        loadTexturesAndBackground(window);
+        GameSetup.loadTexturesAndBackground(window,widthScale,heightScale);
         
         //Draw the initial 4 visible pieces
         for (int i = 0; i < 4; i++) {
-            window.draw(initialVisiblePiecesArray[i].tile);
+            window.draw(InitialVisiblePiecesArray[i].tile);
         }
-
+        
         //Draw the board of invisible pieces
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                window.draw(initialTransparentPiecesArray[i][j].tile);
+                window.draw(InitialTransparentPiecesArray[i][j].tile);
             }
         }
         
-        int xCoord, yCoord;
         
-        if (mousePos.x/BOARD_SQUARE_LENGTH>0 && mousePos.y/BOARD_SQUARE_LENGTH < 8 && mousePos.y/BOARD_SQUARE_LENGTH>0 && mousePos.y/BOARD_SQUARE_LENGTH < 8) {
-            xCoord = (int)mousePos.x/BOARD_SQUARE_LENGTH;
-            yCoord = (int)mousePos.y/BOARD_SQUARE_LENGTH;
-        }
+        //Gets the mouse position
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         
-        if (mousePos.x > xCoord*BOARD_SQUARE_LENGTH && mousePos.x < ((xCoord*BOARD_SQUARE_LENGTH)+BOARD_SQUARE_LENGTH) && mousePos.y > yCoord*BOARD_SQUARE_LENGTH && mousePos.y < ((yCoord*BOARD_SQUARE_LENGTH)+BOARD_SQUARE_LENGTH) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        //Main game loop
             
-            initialTransparentPiecesArray[xCoord][yCoord].tile.setColor(sf::Color(0,0,0,255));
+        //Player move
+        if (turn == "P") {
+            
+            if (CheckPosition.mouseWithinWindow(BOARD_SQUARE_LENGTH, mousePos)) {
+                xCoord = (int)mousePos.x/BOARD_SQUARE_LENGTH;
+                yCoord = (int)mousePos.y/BOARD_SQUARE_LENGTH;
+            }
+                
+            if (CheckPosition.mouseWithinSquare(BOARD_SQUARE_LENGTH, xCoord, yCoord, mousePos) && sf::Mouse::isButtonPressed(sf::   Mouse::Left) && Board.legalSpot(xCoord, yCoord, playerColor)) {
+                    
+                Board.changeBoard(xCoord, yCoord, playerColor);
+                Board.flipBoard(xCoord, yCoord, playerColor);
+                turn = "O";
+                clock.restart();
+            }
+            
+            //Converts the colors of the pieces based on the internal board
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j<8; j++) {
+                    if (Board.board[i][j] == "W") {
+                        InitialTransparentPiecesArray[i][j].tile.setColor(sf::Color(255,255,255,255));
+                        whiteScore++;
+                    } else if (Board.board[i][j] == "B") {
+                        InitialTransparentPiecesArray[i][j].tile.setColor(sf::Color(0,0,0,255));
+                        blackScore++;
+                    }
+                }
+            }
         }
-
+        
+        sf::Time timeElapsed = clock.getElapsedTime();
+        //Computer move
+        if (turn == "O" && timeElapsed.asSeconds() >= 1) {
+            for (int i = 0; i<8; i++) {
+                for (int j = 0; j<8; j++) {
+                    if (Board.legalSpot(i, j, opponentColor)) {
+                        Board.changeBoard(i, j, opponentColor);
+                        Board.flipBoard(i, j, opponentColor);
+                        stop = true;
+                        break;
+                    }
+                }
+                if (stop) {
+                    break;
+                }
+            }
+                
+            stop = false;
+            turn = "P";
+            
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j<8; j++) {
+                    if (Board.board[i][j] == "W") {
+                        InitialTransparentPiecesArray[i][j].tile.setColor(sf::Color(255,255,255,255));
+                        whiteScore++;
+                    } else if (Board.board[i][j] == "B") {
+                        InitialTransparentPiecesArray[i][j].tile.setColor(sf::Color(0,0,0,255));
+                        blackScore++;
+                    }
+                }
+            }
+        }
         // Update the window
         window.display();
     }
 }
 
-void Game::loadTexturesAndBackground(sf::RenderWindow& window) {
-    //Loads the board texture
-    textureLoader.loadBoardTexture();
-    //Creates and draw the board background
-    createBackground(background,textureLoader.boardTexture);
-    window.draw(background);
-
-}
-
-void Game::loadIcon(sf::RenderWindow& window) {
-    //Sets the icon
-    sf::Image icon;
-    if (!icon.loadFromFile(resourcePath() + "icon.png")) {
-        return EXIT_FAILURE;
-    }
-    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-}
 

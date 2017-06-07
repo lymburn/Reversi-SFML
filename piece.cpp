@@ -9,19 +9,26 @@
 #include "piece.hpp"
 
 //Sets the color and texture of the piece
-void Piece::setTextureAndColor (pieceColors& colorParameter) {
-    textureAdder.loadPieceTexture();
+void Piece::setTextureAndColor (PieceColors& colorParameter) {
+    TextureAdder.loadPieceTexture();
     color = colorParameter;
-    texture = textureAdder.pieceTexture;
+    texture = TextureAdder.pieceTexture;
 }
 
 //Add the texture to the piece
 void Piece::addTextureAndColor(sf::Sprite& tile) {
     tile.setTexture(texture);
-    if (color == pieceColors::black) {
+    if (color == PieceColors::black) {
         tile.setColor(sf::Color(0,0,0,255));
     } else {
         tile.setColor(sf::Color(255,255,255,255));
     }
 }
 
+std::string Piece::oppositeColor(std::string color) {
+    if (color == "B"){
+        return "W";
+    } else {
+        return "B";
+    }
+}
