@@ -19,7 +19,7 @@ class Piece {
     public:
         sf::Sprite tile;
         void setTextureAndColor(PieceColors& color);
-        void addTextureAndColor(sf::Sprite& tile);
+        void addTextureAndColor(sf::Sprite& tile, float widthScale, float heightScale);
         std::string oppositeColor(std::string color);
     private:
         PieceColors color;

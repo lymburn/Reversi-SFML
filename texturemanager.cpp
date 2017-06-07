@@ -24,4 +24,19 @@ void TextureManager::loadPieceTexture() {
     }
 }
 
+void TextureManager::loadIncreaseResolutionButton() {
+    if (!increaseResolutionTexture.loadFromFile(resourcePath() + "IncreaseResolution.png")) {
+        std::cout<<"texture not loaded"<<std::endl;
+        return EXIT_FAILURE;
+    }
+}
+
+void TextureManager::loadDecreaseResolutionButton() {
+    if (!decreaseResolutionTexture.loadFromFile(resourcePath() + "DecreaseResolution.png")) {
+        std::cout<<"texture not loaded"<<std::endl;
+        return EXIT_FAILURE;
+        }
+}
+
+
 

@@ -10,16 +10,30 @@
 void Game::run() {
     //Creates initial window
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-    sf::RenderWindow window(sf::VideoMode(1200, 1200), "Reversi");
+    sf::RenderWindow window(sf::VideoMode(1200, 900), "Reversi", sf::Style::Titlebar | sf::Style::Close);
     window.setFramerateLimit(60);
     
-    //Board and piece dimensions
-    const float BOARD_SQUARE_LENGTH = 151.06;
-    const float CENTRE_OFFSET = 11.21;
-    const float RADIUS = 61.0;
     
-    float widthScale, heightScale;
-    bool stop = false;
+    sf::Vector2u size = window.getSize();
+    float widthBoardScale, heightBoardScale, widthPieceScale, heightPieceScale, widthButtonScale, heightButtonScale;
+    unsigned int windowWidth = size.x;
+    unsigned int windowHeight = size.y;
+    
+    //Scales
+    widthBoardScale = float(size.y)/722;
+    heightBoardScale = float(size.y)/722;
+    widthPieceScale = float(size.y)/(10*122);
+    heightPieceScale = float(size.y)/(10*122);
+    widthButtonScale = float(size.x)/(5*310);
+    heightButtonScale = float(size.y)/(6*155);
+    
+    //Board and piece dimensions
+    const float BOARD_SQUARE_LENGTH = 91 * widthBoardScale;
+    const float BOARD_LENGTH = BOARD_SQUARE_LENGTH * 8;
+    const float CENTRE_OFFSET = 7 * widthBoardScale;
+    const float RADIUS = 61.0 * widthPieceScale;
+    
+
     //Variables and objects
     std::string playerColor;
     std::string opponentColor;
@@ -27,6 +41,7 @@ void Game::run() {
     int blackScore = 2;
     std::string turn = "P";
     int xCoord, yCoord;
+    bool stop = false;
     Piece GamePiece;
     SetupManager GameSetup;
     //Object to check positions and legal moves
@@ -40,11 +55,11 @@ void Game::run() {
     
     //Initializes the 4 initial pieces
     Piece InitialVisiblePiecesArray[4];
-    GameSetup.setupVisiblePieces(InitialVisiblePiecesArray, 4,BOARD_SQUARE_LENGTH, CENTRE_OFFSET);
+    GameSetup.setupVisiblePieces(InitialVisiblePiecesArray, 4,BOARD_SQUARE_LENGTH, CENTRE_OFFSET, widthPieceScale, heightPieceScale);
     
     //Initializes the rest of the transparent pieces
     Piece InitialTransparentPiecesArray[8][8];
-    GameSetup.setupTransparentPieces(InitialTransparentPiecesArray, 8, BOARD_SQUARE_LENGTH, CENTRE_OFFSET);
+    GameSetup.setupTransparentPieces(InitialTransparentPiecesArray, 8, BOARD_SQUARE_LENGTH, CENTRE_OFFSET, widthPieceScale, heightPieceScale);
     int i = 0;
     // Start the game loop
     while (window.isOpen())
@@ -70,15 +85,10 @@ void Game::run() {
         //Loads the icon
         GameSetup.loadIcon(window);
         
-        sf::Vector2u size = window.getSize();
-        unsigned int width = size.x;
-        unsigned int height = size.y;
-        widthScale = float(size.x)/722;
-        heightScale = float(size.y)/722;
-        
-        std::cout << widthScale << " " << heightScale << std::endl;
         //Load the textures and create background
-        GameSetup.loadTexturesAndBackground(window,widthScale,heightScale);
+        GameSetup.loadTexturesAndBackground(window,widthBoardScale,heightBoardScale);
+        
+        GameSetup.loadResolutionButtons(window,widthButtonScale, heightButtonScale, BOARD_LENGTH + ((windowWidth - BOARD_LENGTH)/10), windowHeight, BOARD_SQUARE_LENGTH);
         
         //Draw the initial 4 visible pieces
         for (int i = 0; i < 4; i++) {
@@ -107,7 +117,7 @@ void Game::run() {
             }
                 
             if (CheckPosition.mouseWithinSquare(BOARD_SQUARE_LENGTH, xCoord, yCoord, mousePos) && sf::Mouse::isButtonPressed(sf::   Mouse::Left) && Board.legalSpot(xCoord, yCoord, playerColor)) {
-                    
+                
                 Board.changeBoard(xCoord, yCoord, playerColor);
                 Board.flipBoard(xCoord, yCoord, playerColor);
                 turn = "O";

@@ -77,6 +77,8 @@ void InternalBoard::flipDirection(int xCoord, int yCoord, int deltaX, int deltaY
             for (int i = 1; i <= count; i++) {
                 board[xCoord - deltaX*i][yCoord - deltaY*i] = color;
             }
+            
+            break;
         }
     }
 }
