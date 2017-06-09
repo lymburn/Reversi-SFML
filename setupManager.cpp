@@ -12,11 +12,13 @@ void SetupManager::setupInitialPieces(PieceColors color,const float SQUARE_LENGT
     Piece* piecePtr = &initialPiece;
     piecePtr->setTextureAndColor(color);
     piecePtr->addTextureAndColor(piecePtr->tile, widthScale, heightScale);
-    piecePtr->tile.setPosition(row*SQUARE_LENGTH + CENTRE_OFFSET, col*SQUARE_LENGTH + CENTRE_OFFSET);
+    piecePtr->tile.setPosition(row*SQUARE_LENGTH + boardOffset + CENTRE_OFFSET, col*SQUARE_LENGTH + boardOffset + CENTRE_OFFSET);
     
     if (!visible) {
         piecePtr->tile.setColor(sf::Color(255,255,255,0));
     }
+    
+    
 }
 
 void SetupManager::setupVisiblePieces(Piece initialVisiblePiecesArray[], int size, const float BOARD_SQUARE_LENGTH, const float CENTRE_OFFSET, float widthScale, float heightScale) {
@@ -41,12 +43,13 @@ void SetupManager::setupTransparentPieces(Piece initialTransparentPiecesArray[][
     }
 }
 
-void SetupManager::loadTexturesAndBackground(sf::RenderWindow& window, float widthScale, float heightScale) {
+void SetupManager::loadTexturesAndBoard(sf::RenderWindow& window, float widthScale, float heightScale, float offset) {
     //Loads the board texture
     TextureLoader.loadBoardTexture();
-    background.setTexture(TextureLoader.boardTexture);
-    background.setScale(widthScale,heightScale);
-    window.draw(background);
+    board.setTexture(TextureLoader.boardTexture);
+    board.setScale(widthScale,heightScale);
+    board.setPosition(offset,offset);
+    window.draw(board);
 }
 
 void SetupManager::loadIcon(sf::RenderWindow& window) {
@@ -58,16 +61,28 @@ void SetupManager::loadIcon(sf::RenderWindow& window) {
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
-void SetupManager::loadResolutionButtons(sf::RenderWindow& window, float widthScale, float heightScale, float xPosition, float yPosition, const float BOARD_SQUARE_LENGTH) {
-    TextureLoader.loadIncreaseResolutionButton();
-    TextureLoader.loadDecreaseResolutionButton();
-    increaseButton.setTexture(TextureLoader.increaseResolutionTexture);
-    decreaseButton.setTexture(TextureLoader.decreaseResolutionTexture);
-    increaseButton.setPosition(xPosition,yPosition - (7*BOARD_SQUARE_LENGTH));
-    decreaseButton.setPosition(xPosition, yPosition - (5*BOARD_SQUARE_LENGTH));
-    increaseButton.setScale(widthScale, heightScale);
-    decreaseButton.setScale(widthScale, heightScale);
-    
-    window.draw(increaseButton);
-    window.draw(decreaseButton);
+
+void SetupManager::loadBackground(sf::RenderWindow& window, float widthScale, float heightScale) {
+    TextureLoader.loadBackgroundTexture();
+    background.setTexture(TextureLoader.backgroundTexture);
+    background.setScale(widthScale,heightScale);
+    window.draw(background);
+}
+
+void SetupManager::drawInitialTransparentPieces(sf::RenderWindow& window, Piece (*initialTransparentPiecesArray)[8]) {
+
+    //Draw the board of initially transparent pieces
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            window.draw(initialTransparentPiecesArray[i][j].tile);
+        }
+    }
+}
+
+
+void SetupManager::drawInitialVisiblePieces(sf::RenderWindow& window, Piece initialVisiblePiecesArray[4]) {
+    //Draw the initial 4 visible pieces
+    for (int i = 0; i < 4; i++) {
+        window.draw(initialVisiblePiecesArray[i].tile);
+    }
 }

@@ -17,6 +17,8 @@
 #include "setupManager.hpp"
 #include "positionchecker.hpp"
 #include "internalboard.hpp"
+#include "fontmanager.hpp"
+
 
 class Game {
     public:

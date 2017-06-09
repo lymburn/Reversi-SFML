@@ -16,8 +16,8 @@
 class PositionChecker {
 public:
     Piece GamePiece;
-    bool mouseWithinWindow(const float BOARD_SQUARE_LENGTH, sf::Vector2i mousePos);
-    bool mouseWithinSquare(const float BOARD_SQUARE_LENGTH, int row, int col, sf::Vector2i mousePos);
+    bool mouseWithinWindow(const float BOARD_SQUARE_LENGTH, sf::Vector2i mousePos, float offset);
+    bool mouseWithinSquare(const float BOARD_SQUARE_LENGTH, int row, int col, sf::Vector2i mousePos, float offset);
     
 };
 

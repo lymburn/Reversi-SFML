@@ -16,12 +16,10 @@ class TextureManager {
     public:
         void loadBoardTexture();
         void loadPieceTexture();
-        void loadIncreaseResolutionButton();
-        void loadDecreaseResolutionButton();
-        sf::Texture increaseResolutionTexture;
-        sf::Texture decreaseResolutionTexture;
+        void loadBackgroundTexture();
         sf::Texture boardTexture;
         sf::Texture pieceTexture;
+        sf::Texture backgroundTexture;
 };
 
 #endif /* texturemanager_hpp */
