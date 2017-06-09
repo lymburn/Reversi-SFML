@@ -41,7 +41,7 @@ void Game::run() {
     int whiteScore = 2;
     int blackScore = 2;
     int xCoord, yCoord;
-    int tmpPositionScore, tmpI = 0, tmpJ = 0;
+    int tmpPositionScore = -5000, tmpI = 0, tmpJ = 0;
     bool stop = false;
     bool leftClick = false;
     bool playerChoseColor = false;
@@ -153,14 +153,14 @@ void Game::run() {
         
         //Main game loop
         
+        if (!Board.movesAvailable(playerColor)) {
+            turn = "Computer";
+        } else if (!Board.movesAvailable(opponentColor)) {
+            turn = "Player";
+        }
+         
         //Player move
-        if (turn == "Player" && !gameFinished) {
-            //Switches if no available moves
-            
-            if (!Board.movesAvailable(playerColor)) {
-                turn = "Computer";
-            }
-            
+        if (turn == "Player" && !gameFinished && playerChoseColor) {
             
             //Gets the x and y coordinates of the board if the mouse is within the window
             if (CheckPosition.mouseWithinWindow(BOARD_SQUARE_LENGTH, mousePos, backgroundOffset)) {
@@ -182,11 +182,10 @@ void Game::run() {
             //Converts the colors of the pieces based on the internal board
             Board.changeVisualColors(InitialTransparentPiecesArray, whiteScore, blackScore);
         }
-        
         //Gets the time elapsed to set a time delay in between moves
         timeDelay = delayClock.getElapsedTime();
         //Computer move
-        if (turn == "Computer" && timeDelay.asSeconds() >= 1 && !gameFinished) {
+        if (turn == "Computer" && timeDelay.asSeconds() >= 1 && playerChoseColor && !gameFinished) {
             //Switches if no available moves
             
             int positionScore = -5000;
@@ -195,14 +194,12 @@ void Game::run() {
                 turn = "Player";
             }
             
-            
             for (int i = 0; i<8; i++) {
                 for (int j = 0; j<8; j++) {
                     if (Board.legalSpot(i, j, opponentColor)) {
                         positionScore = Board.positionScoreCalculator(i, j);
-                        if (positionScore>tmpPositionScore) {
+                        if (positionScore>=tmpPositionScore) {
                             tmpPositionScore = positionScore;
-                            std::cout<<tmpPositionScore<<std::endl;
                             tmpI = i;
                             tmpJ = j;
                         }
@@ -210,9 +207,8 @@ void Game::run() {
                 }
             }
             
-            tmpPositionScore = 0;
+            tmpPositionScore = -5000;
 
-            
             Board.changeBoard(tmpI, tmpJ, opponentColor);
             Board.flipBoard(tmpI, tmpJ, opponentColor);
             tmpI = 0;

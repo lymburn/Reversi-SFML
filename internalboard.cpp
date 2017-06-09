@@ -14,8 +14,15 @@ bool InternalBoard::checkLegalMove(int xCoord, int yCoord, std::string color, in
     if (board[xCoord][yCoord] == "U") {
         while (xCoord < 8 && yCoord < 8 && board[xCoord][yCoord] != color && xCoord >=0 && yCoord >=0) {
             
+
             xCoord = xCoord + deltaX;
             yCoord = yCoord + deltaY;
+            
+            if (xCoord < 0 || xCoord > 7 || yCoord < 0 || yCoord > 7) {
+                break;
+            }
+            
+            
             if (board[xCoord][yCoord] == GamePiece.oppositeColor(color)) {
                 count++;
             } else break;
@@ -24,8 +31,12 @@ bool InternalBoard::checkLegalMove(int xCoord, int yCoord, std::string color, in
                 break;
             }
             
-            if (board[xCoord + deltaX][yCoord+deltaY] == color && count > 0 && xCoord < 8 && yCoord < 8 && xCoord >=0 && yCoord >=0) {
-                return true;
+            if (xCoord + deltaX > 0 && xCoord + deltaX < 7 && yCoord + deltaY > 0 && yCoord + deltaY < 7) {
+                if (board[xCoord + deltaX][yCoord+deltaY] == color && count > 0 && xCoord < 8 && yCoord < 8 && xCoord >=0 && yCoord >=0) {
+                    return true;
+                }
+            } else {
+                return false;
             }
         } return false;
     } else return false;
