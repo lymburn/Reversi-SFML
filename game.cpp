@@ -19,7 +19,9 @@ void Game::run() {
     unsigned int windowHeight = size.y;
     
     //Scales and dimensions
-    float widthBoardScale, heightBoardScale, widthPieceScale, heightPieceScale, widthScoreScale, heightScoreScale, backgroundWidthScale, backgroundHeightScale;
+    float widthBoardScale, heightBoardScale, widthPieceScale, heightPieceScale, widthScoreScale, heightScoreScale,
+    backgroundWidthScale, backgroundHeightScale;
+    
     widthBoardScale = float(size.y)/800;
     heightBoardScale = float(size.y)/800;
     widthScoreScale = float(size.x)/(5*310);
@@ -151,8 +153,9 @@ void Game::run() {
         //Gets the mouse position
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         
-        //Main game loop
+        //Main game loop between player and computer
         
+        //Switches if no available moves
         if (!Board.movesAvailable(playerColor)) {
             turn = "Computer";
         } else if (!Board.movesAvailable(opponentColor)) {
@@ -160,14 +163,14 @@ void Game::run() {
         }
          
         //Player move
-        if (turn == "Player" && !gameFinished && playerChoseColor) {
+        if (turn == "Player" && !gameFinished && playerChoseColor && Board.movesAvailable(playerColor)) {
             
             //Gets the x and y coordinates of the board if the mouse is within the window
             if (CheckPosition.mouseWithinWindow(BOARD_SQUARE_LENGTH, mousePos, backgroundOffset)) {
                 xCoord = (int)(mousePos.x-backgroundOffset)/BOARD_SQUARE_LENGTH;
                 yCoord = (int)(mousePos.y-backgroundOffset)/BOARD_SQUARE_LENGTH;
             }
-            
+
             //Main mechanism when putting a piece
             if (CheckPosition.mouseWithinSquare(BOARD_SQUARE_LENGTH, xCoord, yCoord, mousePos, backgroundOffset) && leftClick && Board.legalSpot(xCoord, yCoord, playerColor) && timeSinceClick.asSeconds() <= 0.1) {
                 
@@ -185,8 +188,7 @@ void Game::run() {
         //Gets the time elapsed to set a time delay in between moves
         timeDelay = delayClock.getElapsedTime();
         //Computer move
-        if (turn == "Computer" && timeDelay.asSeconds() >= 1 && playerChoseColor && !gameFinished) {
-            //Switches if no available moves
+        if (turn == "Computer" && timeDelay.asSeconds() >= 1 && playerChoseColor && !gameFinished && Board.movesAvailable(opponentColor)) {
             
             int positionScore = -5000;
             

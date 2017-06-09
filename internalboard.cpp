@@ -8,6 +8,7 @@
 
 #include "internalboard.hpp"
 
+//Checks for legal moves in 1 direction
 bool InternalBoard::checkLegalMove(int xCoord, int yCoord, std::string color, int deltaX, int deltaY) {
     int count = 0;
     
@@ -22,7 +23,6 @@ bool InternalBoard::checkLegalMove(int xCoord, int yCoord, std::string color, in
                 break;
             }
             
-            
             if (board[xCoord][yCoord] == GamePiece.oppositeColor(color)) {
                 count++;
             } else break;
@@ -31,7 +31,7 @@ bool InternalBoard::checkLegalMove(int xCoord, int yCoord, std::string color, in
                 break;
             }
             
-            if (xCoord + deltaX > 0 && xCoord + deltaX < 7 && yCoord + deltaY > 0 && yCoord + deltaY < 7) {
+            if (xCoord + deltaX >= 0 && xCoord + deltaX < 8 && yCoord + deltaY >= 0 && yCoord + deltaY < 8) {
                 if (board[xCoord + deltaX][yCoord+deltaY] == color && count > 0 && xCoord < 8 && yCoord < 8 && xCoord >=0 && yCoord >=0) {
                     return true;
                 }
@@ -42,6 +42,7 @@ bool InternalBoard::checkLegalMove(int xCoord, int yCoord, std::string color, in
     } else return false;
 }
 
+//Checks for legal moves in 8 directions
 bool InternalBoard::legalSpot(int xCoord, int yCoord, std::string color) {
     
     if (checkLegalMove(xCoord, yCoord, color, 0, 1)
@@ -58,7 +59,7 @@ bool InternalBoard::legalSpot(int xCoord, int yCoord, std::string color) {
     } else return false;
 }
 
-
+//Change the board color at specific location
 void InternalBoard::changeBoard(int xCoord, int yCoord, std::string color) {
     if (color == "B") {
         board[xCoord][yCoord] = "B";
@@ -67,7 +68,7 @@ void InternalBoard::changeBoard(int xCoord, int yCoord, std::string color) {
     }
 }
 
-
+//Flips the board in one direction
 void InternalBoard::flipDirection(int xCoord, int yCoord, int deltaX, int deltaY, std::string color) {
     int count = 0;
     
@@ -83,7 +84,6 @@ void InternalBoard::flipDirection(int xCoord, int yCoord, int deltaX, int deltaY
         
         if (board[xCoord][yCoord] == GamePiece.oppositeColor(color)) {
             count++;
-            numOfFlips++;
         }
         
         if (board[xCoord][yCoord] == "U") {
@@ -99,6 +99,7 @@ void InternalBoard::flipDirection(int xCoord, int yCoord, int deltaX, int deltaY
     }
 }
 
+//Flips the internal board in each direction
 void InternalBoard::flipBoard(int xCoord, int yCoord, std::string color) {
     flipDirection(xCoord, yCoord, 0, 1, color);
     flipDirection(xCoord, yCoord, -1, 1, color);
@@ -110,6 +111,7 @@ void InternalBoard::flipBoard(int xCoord, int yCoord, std::string color) {
     flipDirection(xCoord, yCoord, 1, 1, color);
 }
 
+//Flips the visual board
 void InternalBoard::changeVisualColors(Piece visualArray[][8], int& whiteScore, int& blackScore) {
     int numbOfWhites = 0;
     int numOfBlacks = 0;
@@ -129,6 +131,8 @@ void InternalBoard::changeVisualColors(Piece visualArray[][8], int& whiteScore, 
     blackScore = numOfBlacks;
 }
 
+
+//Returns whether there are moves available
 bool InternalBoard::movesAvailable(std::string color) {
     bool stop = false;
     int possibleMove = 0;
@@ -151,6 +155,8 @@ bool InternalBoard::movesAvailable(std::string color) {
 
 }
 
+
+//Calculates the scores of each position
 int InternalBoard::positionScoreCalculator(int i, int j) {
     if ((i==0 && j==0) || (i==0 && j==7) || (i==7 && j==0) || (i==7 && j==0)) {
         return 10000;

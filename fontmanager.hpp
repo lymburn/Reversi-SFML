@@ -11,8 +11,8 @@
 
 #include <stdio.h>
 #include "SFML/Graphics.hpp"
-#include <iostream>
 
+//Manages the creation of text and fonts
 class FontManager {
     public:
         void askPlayerColor(sf::RenderWindow& window, float xPosition, float yPosition);

@@ -15,6 +15,7 @@
 #include "piece.hpp"
 #include "ResourcePath.hpp"
 
+//Sets up the original pieces, board, background, and icon.
 class SetupManager {
     public:
         void setupVisiblePieces(Piece initialVisiblePiecesArray[], int size, const float BOARD_SQUARE_LENGTH, const float CENTRE_OFFSET, float widthScale, float heightScale);
@@ -31,8 +32,6 @@ class SetupManager {
         sf::Sprite background;
         sf::Sprite board;
         TextureManager TextureLoader;
-        sf::Sprite whiteScoreboard;
-        sf::Sprite blackScoreboard;
         float boardOffset = 43.875;
 };
 

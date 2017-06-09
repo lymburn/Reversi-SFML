@@ -13,11 +13,12 @@
 #include "SFML/Graphics.hpp"
 #include "piece.hpp"
 
+//Checks for mouse within squares and window
 class PositionChecker {
-public:
-    Piece GamePiece;
-    bool mouseWithinWindow(const float BOARD_SQUARE_LENGTH, sf::Vector2i mousePos, float offset);
-    bool mouseWithinSquare(const float BOARD_SQUARE_LENGTH, int row, int col, sf::Vector2i mousePos, float offset);
+    public:
+        Piece GamePiece;
+        bool mouseWithinWindow(const float BOARD_SQUARE_LENGTH, sf::Vector2i mousePos, float offset);
+        bool mouseWithinSquare(const float BOARD_SQUARE_LENGTH, int row, int col, sf::Vector2i mousePos, float offset);
     
 };
 

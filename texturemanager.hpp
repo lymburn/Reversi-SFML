@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
 
+//Manages the loading and use of textures
 class TextureManager {
     public:
         void loadBoardTexture();
