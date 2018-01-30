@@ -7,5 +7,5 @@ This project is a recreation of the Reversi game using C++ and the SFML library.
 
 I also uploaded a short youtube video demonstrating the gameplay. Feel free to check it out at https://youtu.be/ZNVPVC2AYI0 
 
-
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ZNVPVC2AYI0/0.jpg)](https://www.youtube.com/watch?v=ZNVPVC2AYI0)
 
